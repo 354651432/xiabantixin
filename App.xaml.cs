@@ -69,7 +69,7 @@ namespace WpfApp1
                     }
 
                 });
-            }, null, 0, 60 * 1000);
+            }, null, 0, 1000);
         }
 
         static private DateTime getStartupTime()
