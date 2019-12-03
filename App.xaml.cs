@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace WpfApp1
 {
@@ -43,33 +44,33 @@ namespace WpfApp1
             });
         }
 
-
-
-        DateTime startup;
-        Label span;
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
-            startup = getStartupTime();
+            DateTime startup = getStartupTime();
             Label time = MainWindow.FindName("time") as Label;
             time.Content = startup.ToString();
-            span = MainWindow.FindName("span") as Label;
+            Label span = MainWindow.FindName("span") as Label;
 
-            new Timer(_ =>
+            new Thread(_ =>
             {
-                Dispatcher.Invoke(() =>
+                while (true)
                 {
-                    var spanTime = DateTime.Now - startup;
-                    span.Content = String.Format("{0}小时{1}分钟", spanTime.Hours, spanTime.Minutes);
-                    if (spanTime.Hours >= 9)
+                    Dispatcher.Invoke(() =>
                     {
-                        span.Foreground = Brushes.Red;
-                        span.FontWeight = FontWeights.Bold;
-                        //notifyIcon.ShowBalloonTip(2000, "", "可以下班了", System.Windows.Forms.ToolTipIcon.None);
-                    }
+                        var spanTime = DateTime.Now - startup;
+                        span.Content = String.Format("{0}小时{1}分钟", spanTime.Hours, spanTime.Minutes);
+                        if (spanTime.Hours >= 9)
+                        {
+                            span.Foreground = Brushes.Red;
+                            span.FontWeight = FontWeights.Bold;
+                            //notifyIcon.ShowBalloonTip(2000, "", "可以下班了", System.Windows.Forms.ToolTipIcon.None);
+                        }
 
-                });
-            }, null, 0, 1000);
+                    });
+                    Thread.Sleep(1000);
+                }
+            }).Start();
         }
 
         static private DateTime getStartupTime()
