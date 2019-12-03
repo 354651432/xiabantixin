@@ -11,11 +11,13 @@
         Top="700"
         Left="1300"
         ShowInTaskbar="False"
-        Title="" 
+        Title=""  
         Height="70" 
         ResizeMode="NoResize"
         BorderThickness="1"
         BorderBrush="#FFFFFF"
+        Opacity="0.85"
+        AllowsTransparency="True"
         Width="200">
     <Grid>
         <Label Content="开机时间" Margin="10,10,0,0" />
